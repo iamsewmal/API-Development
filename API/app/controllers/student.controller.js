@@ -84,6 +84,23 @@ exports.update = (req,res) =>{
     }
 };
 
+exports.updateByStudentId =(req,res) =>{
+    Student.updateByStudentId(req.params.studentid,new Student(req.body),(err,data)=>{
+        if(err){
+            if(err.kind === "not_found"){
+                res.status(404).send({
+                    message : "No Student record was found under student id "+req.params.studentid
+                });
+            }else{
+                res.status(500).send({
+                    message : "An error occured"
+                });
+            }
+        }else{
+            res.send(data);
+        }
+    });
+};
 exports.delete = (req,res)=>{
     Student.delete(req.params.NIC,(err,data)=>{
         if(err){

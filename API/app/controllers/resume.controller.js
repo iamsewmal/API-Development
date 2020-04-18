@@ -168,35 +168,35 @@ exports.delete = (req,res) =>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    message : `The user with NIC ${req.params.NIC} is not found`
+                    message : `The resume with NIC ${req.params.NIC} is not found`
                 });
             }
             else{
                 res.status(500).send({
-                    message : `Error deleting the user with NIC ${req.params.NIC}`
+                    message : `Error deleting the resume with NIC ${req.params.NIC}`
                 });
             }
         }else{
-            res.send({message : `The User was deleted successfully`});
+            res.send({message : `The resume was deleted successfully`});
         }
     });
 };
 
 exports.deleteByStudentId = (req,res) =>{
-    Resume.delete(req.params.studentid,(err,data)=>{
+    Resume.deleteByStudentId(req.params.studentid,(err,data)=>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    message : `The user with Student ID ${req.params.studentid} is not found`
+                    message : `The resume with Student ID ${req.params.studentid} is not found`
                 });
             }
             else{
                 res.status(500).send({
-                    message : `Error deleting the user with Student ID ${req.params.studentid}`
+                    message : `Error deleting the resume with Student ID ${req.params.studentid}`
                 });
             }
         }else{
-            res.send({message : `The User was deleted successfully`});
+            res.send({message : `The resume was deleted successfully`});
         }
     });
 };
@@ -206,10 +206,10 @@ exports.deleteAll = (req,res) =>{
         if(err){
             res.status(500).send({
                 message:
-              err.message || "Some error occurred while removing all Users." 
+              err.message || "Some error occurred while removing all resumes." 
             });
         }else{
-            res.send({message : "All the Users were deleted successfully"});
+            res.send({message : "All the resumes were deleted successfully"});
         }
     });
 }

@@ -82,6 +82,24 @@ Student.update = (NIC, student, result) =>{
     });
 };
 
+Student.updateByStudentId = (studentid, student, result) =>{
+    sql.query("UPDATE Student SET Affiliation = ?, \
+    NIC = ? WHERE Student_ID = ?",[student.Affiliation,student.NIC,studentid],(err,res)=>{
+        if(err){
+            console.log("Error: ",err);
+            result(err,null);
+            return;
+        }else if(res.affectedRows == 0){
+            console.log("The Student with student id "+studentid+" was not found");
+            result({kind:"not_found"},null);
+            return;
+        }else{
+            console.log("Updated Student ",{...student});
+            result(null,{...student});
+        }
+    });
+};
+
 Student.delete = (NIC,result) =>{
     sql.query("DELETE FROM Student WHERE NIC = ?",NIC,(err,res)=>{
         if(err){

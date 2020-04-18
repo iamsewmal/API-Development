@@ -82,6 +82,24 @@ Expert.update = (NIC, expert, result) =>{
     });
 };
 
+Expert.updateByEmpId = (EmpId,expert,result) =>{
+    sql.query("UPDATE Expert SET Affiliation = ?, \
+    NIC = ? WHERE Employee_ID = ?",[expert.Affiliation,expert.NIC,EmpId],(err,res)=>{
+        if(err){
+            console.log("Error: ",err);
+            result(err,null);
+            return;
+        }else if(res.affectedRows == 0){
+            console.log("The Expert with employee "+expert.EmpId+" is not found");
+            result({kind:"not_found"},null);
+            return;
+        }else{
+            console.log("Updated Expert: ",{...expert});
+            result(null,{...expert});
+        }
+    });
+};
+
 Expert.delete = (NIC,result)=>{
     sql.query("DELETE FROM Expert WHERE NIC = ?",NIC,(err,res)=>{
         if(err){
@@ -95,6 +113,24 @@ Expert.delete = (NIC,result)=>{
         }else{
             console.log("Deleted Expert with NIC "+NIC);
             result(null,res);
+        }
+    });
+}
+
+Expert.deleteByEmpId = (EmpId,result)=>{
+    sql.query("DELETE FROM Expert WHERE Employee_ID = ?",EmpId,(err,res)=>{
+        if(err){
+            console.log("Error: ",err);
+            result(err,null);
+            return;
+        }else if(res.affectedRows == 0){
+            console.log("The Expert with employee id "+EmpId+" is not found");
+            result({kind:"not_found"},null);
+            return;
+        }else{
+            console.log("Deleted Expert with employee id "+EmpId);
+            result(null,res);
+            return;
         }
     });
 }

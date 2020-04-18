@@ -16,6 +16,7 @@ require("./app/routes/tester.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
 require("./app/routes/login.routes.js")(app);
 require("./app/routes/expert.route.js")(app);
+require("./app/routes/admin.route.js")(app);
 require("./app/routes/student.route.js")(app);
 require("./app/routes/resume.route.js")(app);
 

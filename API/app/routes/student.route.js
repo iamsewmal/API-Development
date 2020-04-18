@@ -5,6 +5,7 @@ module.exports = app => {
     app.get("/students/:NIC",students.findByNIC);
     app.get("/students/studentid/:studentId",students.findByStudentId);
     app.put("/students/:NIC",students.update);
+    app.put("/students/studentid/:studentid",students.updateByStudentId);
     app.delete("/students/:NIC",students.delete);
     app.delete("/students",students.deleteAll);
 };

@@ -1,15 +1,15 @@
-const Expert = require('../models/expert.model.js');
+const Admin = require("../models/admin.model.js");
 
-exports.create = (req,res)=>{
+exports.create = (req,res) => {
     if(!req.body){
         res.status(400).send({
-            messsage : "Content cannot be empty"
+            message:"Content cannot be empty"
         });
     }else{
-        Expert.create(new Expert(req.body),(err,data)=>{
+        Admin.create(new Admin(req.body),(err,data)=>{
             if(err){
                 res.status(500).send({
-                    messsage : "An error occured"
+                    message : err.message || "An error occured"
                 });
             }else{
                 res.send(data);
@@ -18,11 +18,11 @@ exports.create = (req,res)=>{
     }
 };
 
-exports.findAll = (req,res) =>{
-    Expert.findAll((err,data)=>{
+exports.findAll = (req,res) => {
+    Admin.findAll((err,data)=>{
         if(err){
             res.status(500).send({
-                messsage : "An error occured"
+                message : err.message || "An error occured"
             });
         }else{
             res.send(data);
@@ -31,15 +31,15 @@ exports.findAll = (req,res) =>{
 };
 
 exports.findByNIC = (req,res) => {
-    Expert.findByNIC(req.params.NIC,(err,data)=>{
+    Admin.findByNIC(req.params.NIC,(err,data)=>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    messsage : "The Expert with NIC "+req.params.NIC+" is not found"
+                    message : "No record was found for NIC "+req.params.NIC
                 });
             }else{
                 res.status(500).send({
-                    messsage : err.messsage || "An Error Occured"
+                    message : err.message || "An error occured"
                 });
             }
         }else{
@@ -48,39 +48,39 @@ exports.findByNIC = (req,res) => {
     });
 };
 
-exports.findByEmpId = (req,res)=>{
-    Expert.findByEmpId(req.params.empid,(err,data)=>{
+exports.findByAdminId = (req,res) => {
+    Admin.findByAdminId(req.params.adminid,(err,data)=>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    messsage : "The Expert with Employee ID "+req.params.empid+" is not found"
-                })
+                    message : "No record found for admin id "+req.params.adminid
+                });
             }else{
                 res.status(500).send({
-                    messsage : err.messsage || "An Error Occured"
+                    message : err.message || "An error occured"
                 });
             }
         }else{
             res.send(data);
         }
-    })
+    });
 };
 
 exports.update = (req,res) => {
     if(!req.body){
         res.status(400).send({
-            messsage : "Content cannot be empty"
+            message : "Content cannot be empty"
         });
     }else{
-        Expert.update(req.params.NIC,new Expert(req.body),(err,data)=>{
+        Admin.update(req.params.NIC,new Admin(req.body),(err,data)=>{
             if(err){
                 if(err.kind === "not_found"){
                     res.status(404).send({
-                        messsage : "The Expert with NIC "+req.params.NIC+" is not found"
+                        message : "No record was found for NIC "+req.params.NIC
                     });
                 }else{
                     res.status(500).send({
-                        messsage : "An error occured"
+                        message : err.message || "An error occured"
                     });
                 }
             }else{
@@ -90,21 +90,21 @@ exports.update = (req,res) => {
     }
 };
 
-exports.updateByEmpId = (req,res)=>{
+exports.updateById = (req,res) => {
     if(!req.body){
         res.status(400).send({
-            messsage : "Content cannot be empty"
+            message : "Content cannot be empty"
         });
     }else{
-        Expert.updateByEmpId(req.params.empid,new Expert(req.body),(err,data)=>{
+        Admin.updateById(req.params.adminid,new Admin(req.body),(err,data)=>{
             if(err){
                 if(err.kind === "not_found"){
                     res.status(404).send({
-                        messsage : "The Expert with employee id "+req.params.empid+" is not found"
+                        message : "No records were found for admin id "+req.params.adminid
                     });
                 }else{
                     res.status(500).send({
-                        messsage : "An error occured"
+                        message : err.message || "An error occured"
                     });
                 }
             }else{
@@ -114,54 +114,50 @@ exports.updateByEmpId = (req,res)=>{
     }
 };
 
-exports.delete = (req,res) =>{
-    Expert.delete(req.params.NIC,(err,data)=>{
+exports.delete = (req,res) => {
+    Admin.delete(req.params.NIC,(err,data)=>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    messsage : "The Expert with NIC "+req.params.NIC+" is not found"
+                    message : "No record found for NIC "+req.params.NIC
                 });
             }else{
                 res.status(500).send({
-                    messsage:
-                    err.messsage || "An error occured"
+                    message : err.message || "An error occured"
                 });
             }
         }else{
-            res.send({messsage : "The Expert was deleted successfully"});
+            res.send({message: "The Admin was successfully deleted"});
         }
     });
 };
 
-exports.deleteByEmpId = (req,res) =>{
-    Expert.deleteByEmpId(req.params.empid,(err,data)=>{
+exports.deleteById = (req,res) => {
+    Admin.deleteById(req.params.adminid,(err,data)=>{
         if(err){
             if(err.kind === "not_found"){
                 res.status(404).send({
-                    messsage : "The Expert with employee id "+req.params.empid+" is not found"
+                    message : "No record found for admin id "+req.params.adminid
                 });
             }else{
                 res.status(500).send({
-                    messsage:
-                    err.messsage || "An error occured"
+                    message : err.message || "An error occured"
                 });
             }
         }else{
-            res.send({messsage : "The Expert was deleted successfully"});
+            res.send({message: "The Admin was successfully deleted"});
         }
     });
 };
 
-exports.deleteAll = (req,res) =>{
-    Expert.deleteAll((err,data)=>{
+exports.deleteAll = (req,res) => {
+    Admin.deleteAll((err,data)=>{
         if(err){
             res.status(500).send({
-                messsage : "An Error occured"
+                message : err.message || "An error occured"
             });
         }else{
-            res.send({
-                messsage : "All Experts were removed successfully"
-            });
+            res.send({message: "All admin records were successfully deleted"});
         }
     });
 };
