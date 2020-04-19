@@ -104,11 +104,11 @@ exports.verifyPassword = (req,res) =>{
         }else{
             if(data.kind === "match"){
                 res.send({
-                    message : "Passwords Match"
+                    message : "Correct Password"
                 });
             }else if(data.kind ==="unmatch"){
                 res.send({
-                    message : "Passwords do not match"
+                    message : "Wrong Password"
                 });
             }
         }
