@@ -71,6 +71,50 @@ exports.findByUsername = (req,res) =>{
     });
 };
 
+exports.getPasswordByUsername = (req,res) =>{
+    Login.getPasswordByUsername(req.params.username,(err,data)=>{
+        if(err){
+            if(err.kind === "not_found"){
+                res.status(404).send({
+                    message : "The password for username "+req.params.username+" is not found"
+                });
+            }else{
+                res.status(500).send({
+                    message : err.message || "An error occured"
+                });
+            }
+        }else{
+            res.send(data);
+        }
+    });
+};
+
+exports.verifyPassword = (req,res) =>{
+    Login.verifyPassword(req.params.username,req.params.password,(err,data)=>{
+        if(err){
+            if(err.kind === "not_found"){
+                res.status(404).send({
+                    message : "No records were found"
+                });
+            }else{
+                res.status(500).send({
+                    message : err.message || "An error occured"
+                });
+            }
+        }else{
+            if(data.kind === "match"){
+                res.send({
+                    message : "Correct Password"
+                });
+            }else if(data.kind ==="unmatch"){
+                res.send({
+                    message : "Wrong Password"
+                });
+            }
+        }
+    })
+};
+
 exports.update = (req,res) =>{
     if(!req.body){
         res.status(400).send({

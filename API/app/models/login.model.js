@@ -1,23 +1,34 @@
 const sql = require('./db.js');
-
+const bcrypt = require("bcrypt");
 const Login = function(login) {
     this.UserName = login.UserName;
     this.Password = login.Password;
     this.AccountType = login.AccountType;
     this.NIC = login.NIC;
-};
+}; 
 
 Login.create = (newLogin, result) =>{
-    sql.query("INSERT INTO Login_Credentials SET ?",newLogin,(err,res)=>{
+   
+    bcrypt.hash(newLogin.Password,10,(err,hash)=>{
         if(err){
-            console.log("Error: "+err);
+            console.log("Error hashing password "+err);
             result(err,null);
             return;
         }else{
-            console.log("Created Record ",{...newLogin});
-            result(null,{...newLogin});
+                    sql.query("INSERT INTO Login_Credentials SET UserName = ?,Password = ?,AccountType = ?,NIC = ?\
+            ",[newLogin.UserName,hash,newLogin.AccountType,newLogin.NIC],(err,res)=>{
+                if(err){
+                    console.log("Error: "+err);
+                    result(err,null);
+                    return;
+                }else{
+                    console.log("Created Record ",{...newLogin});
+                    result(null,{...newLogin});
+                }
+            });
         }
     });
+    
 };
 
 Login.findAll = (result) =>{
@@ -27,7 +38,6 @@ Login.findAll = (result) =>{
             result(err,null);
             return;
         }else{
-            console.log("Login Credentials: "+res);
             result(null,res);
         }
     });
@@ -65,22 +75,75 @@ Login.findByUsername = (username,result) =>{
             result({kind:"not_found"},null);
         }
     });
-}
+};
 
-Login.update = (id,login,result) =>{
-    sql.query("UPDATE Login_Credentials SET UserName = ?,Password = ?,AccountType = ? WHERE NIC = ?\
-    ",[login.UserName,login.Password,login.AccountType,id],(err,res)=>{
+Login.getPasswordByUsername = (username,result) =>{
+    sql.query("SELECT Password FROM Login_Credentials WHERE UserName = ?",username,(err,res)=>{
         if(err){
-            console.log("Error : "+err);
+            console.log("Error: ",err);
             result(err,null);
             return;
-        }else if(res.affectedRows == 0){
-            console.log("The Login Credentials are not found");
-            result({ kind: "not_found" }, null);
+        }else if(res.length){
+            console.log("Found password ",res[0]);
+            result(null,res[0]);
             return;
         }else{
-            console.log("Updated Login Credentials",{...login});
-            result(null,{...login});
+            console.log("No password was found for username ",username);
+            result({kind:"not_found"},null);
+            return;
+        }
+    });
+};
+
+Login.verifyPassword = (username,password,result) =>{
+    sql.query("SELECT Password FROM Login_Credentials WHERE UserName = ?",username,(err,res)=>{
+        if(err){
+            console.log("Error: ",err);
+            result(err,null);
+            return;
+        }else if(res.length){ 
+            bcrypt.compare(password,res[0].Password,(err,res)=>{
+                if(res){
+                    console.log("Passwords match");
+                    result(null,{kind:"match"});
+                    return;
+                }else{
+                    console.log("Passwords don't match");
+                    result(null,{kind:"unmatch"});
+                    return
+                }
+            });
+        }else{
+            console.log("No records were found");
+            result({kind:"not_found"},null);
+            return;
+        }
+    });
+};
+
+Login.update = (id,login,result) =>{
+    
+    bcrypt.hash(login.Password,10,(err,hash)=>{
+        if(err){
+            console.log("Error Hashing"+err);
+            result(err,null);
+            return;
+        }else{
+                    sql.query("UPDATE Login_Credentials SET UserName = ?,Password = ?,AccountType = ? WHERE NIC = ?\
+            ",[login.UserName,hash,login.AccountType,id],(err,res)=>{
+                if(err){
+                    console.log("Error : "+err);
+                    result(err,null);
+                    return;
+                }else if(res.affectedRows == 0){
+                    console.log("The Login Credentials are not found");
+                    result({ kind: "not_found" }, null);
+                    return;
+                }else{
+                    console.log("Updated Login Credentials",{...login});
+                    result(null,{...login});
+                }
+            });
         }
     });
 };

@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `Login_Credentials`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Login_Credentials` (
   `UserName` varchar(20) NOT NULL,
-  `Password` varchar(100) NOT NULL,
+  `Password` varchar(250) NOT NULL,
   `AccountType` varchar(10) NOT NULL,
   `NIC` varchar(12) NOT NULL,
   PRIMARY KEY (`UserName`),
@@ -92,6 +92,7 @@ CREATE TABLE `Login_Credentials` (
 
 LOCK TABLES `Login_Credentials` WRITE;
 /*!40000 ALTER TABLE `Login_Credentials` DISABLE KEYS */;
+INSERT INTO `Login_Credentials` VALUES ('aaa','$2b$10$1qHCIeoluaNeM1pE6mhu9e/v4aXxZe2W2NgegcubxrFRE60ncJBae','Expert','199604901120'),('bbb','$2b$10$D7qAcPEy1ePoYKW/mXRhFu12Zc9XARjeRWmOLzWo.XWo3eCm.XI2G','Expert','199604901121'),('ccc','$2b$10$9801Ihp8//8fYSwok5g49ugecshGP2LJ1b3y2TRb.TOJqpX.mZ8jW','Expert','199925412521');
 /*!40000 ALTER TABLE `Login_Credentials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-18 23:35:10
+-- Dump completed on 2020-04-19 16:23:13
