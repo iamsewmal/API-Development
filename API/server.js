@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const PORT = 3000;
+const PORT = 5001;
 
 const app = express();
 
@@ -12,7 +12,6 @@ app.get("/", (req,res)=>{
     res.json({message:"Welcome to University_To_Industry"});
 });
 
-require("./app/routes/tester.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
 require("./app/routes/login.routes.js")(app);
 require("./app/routes/expert.route.js")(app);

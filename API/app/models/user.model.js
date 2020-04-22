@@ -117,6 +117,7 @@ User.findByNIC = (NIC, result) => {
   };
 
   User.delete = (NIC, result) => {
+
     sql.query("DELETE FROM User WHERE NIC = ?", NIC, (err, res) => {
       if (err) {
         console.log("error: ", err);
